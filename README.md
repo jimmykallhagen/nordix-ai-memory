@@ -1,10 +1,7 @@
 # ZFS as a Memory Extension Layer for Local AI Inference
 
----
+ - A framework for ZFS-backed memory extension in local AI inference.
 
-## A theoretical framework for ZFS-backed memory extension in local AI inference. A systems-level approach to running large language models on commodity hardware
-
- - Just theoretical, not tested
 
 ---
 
