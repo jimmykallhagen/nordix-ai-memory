@@ -22,7 +22,7 @@ This document explores a systems-level approach: using ZFS, compressed memory, a
 
 ## Why This Matters for Businesses
 
-Every company has internal knowledge — documentation, contracts, procedures, customer data, compliance records. Running a local language model against this data means:
+Every company has internal knowledge - documentation, contracts, procedures, customer data, compliance records. Running a local language model against this data means:
 
 - **No data leaves the building.** Sensitive documents stay on your hardware, not on someone else's server.
 - **No per-token cost.** Cloud AI billing scales with usage. Local inference has a fixed hardware cost.
@@ -50,7 +50,7 @@ AI model weights, particularly quantized weights, exhibit patterns that compress
 
 ## The Architecture: Three Memory Tiers
 
-Modern AI inference engines like llama.cpp process transformer models layer by layer. At any given moment, only one or two layers need to be in active memory. This sequential access pattern is the key — it means we can tier memory without catastrophic performance loss.
+Modern AI inference engines like llama.cpp process transformer models layer by layer. At any given moment, only one or two layers need to be in active memory. This sequential access pattern is the key - it means we can tier memory without catastrophic performance loss.
 
 The proposed architecture has three tiers:
 
@@ -77,7 +77,7 @@ The critical point: **the application does not need to know about these tiers.**
 
 Other storage systems can provide fast NVMe access. But ZFS offers specific advantages for this use case:
 
-**Compressed ARC serves as Tier 1.5.** When a model is stored on a ZFS dataset, frequently accessed blocks are cached in ARC in their compressed form. This is not swap — it is genuine caching with LRU eviction, hit rate tracking, and adaptive sizing. Hot model layers stay in compressed ARC automatically.
+**Compressed ARC serves as Tier 1.5.** When a model is stored on a ZFS dataset, frequently accessed blocks are cached in ARC in their compressed form. This is not swap - it is genuine caching with LRU eviction, hit rate tracking, and adaptive sizing. Hot model layers stay in compressed ARC automatically.
 
 **zvol provides a clean block device interface.** A ZFS zvol can be used directly as a swap device or as a DAX-capable block device for memory tiering. The guest (the AI engine) sees a block device. ZFS handles compression, checksumming, and caching underneath.
 
@@ -116,7 +116,7 @@ When combined with a ZFS zvol exposed as swap on fast NVMe storage, the kernel m
 
 ## CXL: The Future of This Approach
 
-Compute Express Link (CXL) is an emerging standard that formalizes exactly this concept. CXL memory expanders attach additional memory pools via the PCIe bus, and the CPU can access them coherently — slower than local DRAM, but faster than storage.
+Compute Express Link (CXL) is an emerging standard that formalizes exactly this concept. CXL memory expanders attach additional memory pools via the PCIe bus, and the CPU can access them coherently - slower than local DRAM, but faster than storage.
 
 Samsung, Lenovo, and others are already shipping CXL memory expanders for server platforms. The Linux kernel (6.3+) has native CXL support, and tools like Samsung's open-source SMDK (Scalable Memory Development Kit) provide a full software stack for managing tiered CXL memory.
 
@@ -233,7 +233,7 @@ This approach does not make a desktop perform like a datacenter. Specific limita
 
 The building blocks for memory-extended local AI inference already exist in the Linux ecosystem. ZFS provides compressed caching and block-level storage management. The Linux kernel provides transparent memory tiering. Modern NVMe drives provide the bandwidth to make storage-backed memory practical.
 
-What has been missing is the recognition that these systems-level tools — originally built for databases, virtual machines, and file servers — apply directly to the problem of running large AI models on commodity hardware.
+What has been missing is the recognition that these systems-level tools - originally built for databases, virtual machines, and file servers — apply directly to the problem of running large AI models on commodity hardware.
 
 For businesses considering local AI deployment, this approach offers a path that does not require specialized hardware, cloud subscriptions, or sending sensitive data to external providers. It requires a Linux system, competent configuration, and an understanding of how memory hierarchies work.
 
@@ -243,12 +243,12 @@ The models are open. The hardware is affordable. The software is free. The missi
 
 ## Related Work
 
-- [Nordix VM — ZFS, ARC, zvol and Virtual Machines](https://github.com/jimmykallhagen/nordix-vm) — Detailed documentation on ZFS zvol configuration for virtual machines, including benchmarks and compressed ARC analysis.
-- [Nordix](https://github.com/jimmykallhagen/Nordix) — A Linux distribution built around the philosophy of RAM as workspace, NVMe as storage, and ZFS as the foundation.
-- [GreenBoost](https://www.phoronix.com/news/Open-Source-GreenBoost-NVIDIA) — An open-source Linux kernel module for transparently extending NVIDIA GPU VRAM with system RAM and NVMe storage.
-- [Linux Kernel Memory Tiering](https://stevescargall.com/blog/2022/06/using-linux-kernel-memory-tiering/) — Guide to configuring memory tiering in Linux kernel 5.15+.
+- [Nordix VM — ZFS, ARC, zvol and Virtual Machines](https://github.com/jimmykallhagen/nordix-vm) - Detailed documentation on ZFS zvol configuration for virtual machines, including benchmarks and compressed ARC analysis.
+- [Nordix](https://github.com/jimmykallhagen/Nordix) - A Linux distribution built around the philosophy of RAM as workspace, NVMe as storage, and ZFS as the foundation.
+- [GreenBoost](https://www.phoronix.com/news/Open-Source-GreenBoost-NVIDIA) - An open-source Linux kernel module for transparently extending NVIDIA GPU VRAM with system RAM and NVMe storage.
+- [Linux Kernel Memory Tiering](https://stevescargall.com/blog/2022/06/using-linux-kernel-memory-tiering/) - Guide to configuring memory tiering in Linux kernel 5.15+.
 - [Samsung SMDK](https://github.com/OpenMPDK/SMDK) — Scalable Memory Development Kit for CXL memory management.
-- [VMware ESXi 9.0 Memory Tiering over NVMe](https://lenovopress.lenovo.com/lp2288-implementing-memory-tiering-over-nvme-using-vmware-esxi-90) — Enterprise implementation of NVMe as tiered memory.
+- [VMware ESXi 9.0 Memory Tiering over NVMe](https://lenovopress.lenovo.com/lp2288-implementing-memory-tiering-over-nvme-using-vmware-esxi-90) - Enterprise implementation of NVMe as tiered memory.
 
 ---
 
