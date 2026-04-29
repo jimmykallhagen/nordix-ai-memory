@@ -5,9 +5,9 @@
 
 ---
 
+**Part of:** [Nordix](https://github.com/jimmykallhagen/Nordix)  
 **Author:** Jimmy Källhagen  
-**Project:** [Nordix](https://github.com/jimmykallhagen/Nordix)  
-**License:** SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0  
+**License:** GPL-3.0-or-later  
 **Copyright (c) 2025 Jimmy Källhagen**
 
 ---
